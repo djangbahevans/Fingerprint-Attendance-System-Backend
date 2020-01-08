@@ -41,10 +41,12 @@ app.post('/', async (req, res) => {
         const person = await Person.create({ id, firstName: first, lastName: last, department: dept })
         res.send(person)
     }
-    else if (ins === "changeTime") {
-        const { hour, minute } = req.body
-        console.log(`Hour is ${hour}, minute is ${minute}`)
-        res.send("done")
+    else if (ins === "att") {
+        const { id, year, month, day, hour, minute } = req.body
+        await Person.findOne({ id })
+        person.attendance.push(new Date(year, month, day, hour, minute))
+        const person = await person.save()
+        res.send(person)
     }
     else if (ins === "delete") {
         const { id } = req.body
