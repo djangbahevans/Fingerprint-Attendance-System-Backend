@@ -20,6 +20,11 @@ mongoose.connect(URI, {
         process.abort();
     });
 
+app.get("/", async (req, res) => {
+    const person = await Person.find()
+    res.send(person)
+})
+
 app.get('/:id', async (req, res) => {
     const { id } = req.params
     console.log(`id is ${id}`)
