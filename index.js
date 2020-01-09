@@ -21,44 +21,42 @@ mongoose.connect(URI, {
     });
 
 app.get("/", async (req, res) => {
-    const person = await Person.find()
-    res.send(person)
-})
+    const person = await Person.find();
+    res.send({ data: person });
+});
 
 app.get('/:id', async (req, res) => {
-    const { id } = req.params
-    console.log(`id is ${id}`)
+    const { id } = req.params;
+
     if (!isNaN(parseInt(id))) {
-        const person = await Person.findOne({ id: parseInt(id) })
-        res.send(person)
+        const person = await Person.findOne({ id: parseInt(id) });
+        res.send(person);
     }
 });
 
 app.post('/', async (req, res) => {
-    const { ins } = req.body
+    const { ins } = req.body;
     if (ins === "add") {
-        const { id, first, last, dept } = req.body
-        const person = await Person.create({ id, firstName: first, lastName: last, department: dept })
-        res.send(person)
+        const { id, first, last, dept } = req.body;
+        const person = await Person.create({ id, firstName: first, lastName: last, department: dept });
+        res.send(person);
     }
     else if (ins === "att") {
-        const { id, year, month, day, hour, minute } = req.body
-        await Person.findOne({ id })
-        person.attendance.push(new Date(year, month, day, hour, minute))
-        const person = await person.save()
-        res.send(person)
+        const { id, year, month, day, hour, minute } = req.body;
+        await Person.findOne({ id });
+        person.attendance.push(new Date(year, month, day, hour, minute));
+        const person = await person.save();
+        res.send(person);
     }
     else if (ins === "delete") {
-        const { id } = req.body
-        const person = await Person.deleteOne({ id })
-        res.send(person)
+        const { id } = req.body;
+        const person = await Person.deleteOne({ id });
+        res.send(person);
     } else {
-        console.log("Unknown instruction")
-        res.send(`Unknown instruction ${req.body}`)
+        console.log("Unknown instruction");
+        res.send(`Unknown instruction ${req.body}`);
     }
-})
+});
 
 const PORT = process.env.PORT || 3000;
-const server = app.listen(PORT, function () {
-    console.log('Listening on port ' + server.address().port);
-});
+const server = app.listen(PORT, () => console.log('Listening on port ' + server.address().port));
