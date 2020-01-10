@@ -18,7 +18,28 @@ const PersonSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    attendance: [Date]
+    attendance: [{
+        year: {
+            type: Number,
+            required: true
+        },
+        month: {
+            type: Number,
+            required: true
+        },
+        day: {
+            type: Number,
+            required: true
+        },
+        hour: {
+            type: Number,
+            required: true
+        },
+        minute: {
+            type: Number,
+            required: true
+        },
+    }]
 });
 
 const Person = mongoose.model("Person", PersonSchema)
