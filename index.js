@@ -42,7 +42,15 @@ app.post('/', async (req, res) => {
         res.send(person);
     }
     else if (ins === "att") {
-        const { id, year, month, day, hour, minute } = req.body;
+        const { id } = req.body;
+        
+        const date = new Date();
+        const year = date.getUTCFullYear()
+        const month = date.getUTCMonth();
+        const day = date.getUTCDay();
+        const hour = date.getUTCHours();
+        const minute = date.getUTCMinutes();
+
         await Person.findOne({ id });
         person.attendance.push({year, month, day, hour, minute});
         const person = await person.save();
