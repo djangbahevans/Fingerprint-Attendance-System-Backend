@@ -42,17 +42,38 @@ app.post('/', async (req, res) => {
         res.send(person);
     }
     else if (ins === "att") {
-        const { id } = req.body;
+        const { id, data } = req.body;
         
         const date = new Date();
-        const year = date.getUTCFullYear()
-        const month = date.getUTCMonth();
-        const day = date.getUTCDay();
-        const hour = date.getUTCHours();
-        const minute = date.getUTCMinutes();
+        const year = data.substring(0, 4) || date.getUTCFullYear()
+        const month = data.substring(4, 6) || date.getUTCMonth();
+        const day = data.substring(6, 8) || date.getUTCDay();
+        const hour = ddata.substring(8, 10) || date.getUTCHours();
+        const minute = data.substring(10, 12) || date.getUTCMinutes();
 
         await Person.findOne({ id });
-        person.attendance.push({year, month, day, hour, minute});
+        // Add and sort
+        person.attendance.push({ year, month, day, hour, minute }).sort((a, b) => {
+            if (a.year > b.year) return 1;
+            else if (a.year < b.year) return -1;
+            else {
+                if (a.month > b.month) return 1;
+                else if (a.month < b.month) return -1;
+                else {
+                    if (a.day > b.day) return 1;
+                    else if (a.day < b.day) return -1;
+                    else {
+                        if (a.hour > b.hour) return 1;
+                        else if (a.hour < b.hour) return -1;
+                        else {
+                            if (a.minute > b.minute) return 1;
+                            else if (a.minute < b.minute) return -1;
+                            else return 0;
+                        }
+                    }
+                }
+            }
+        });
         const person = await person.save();
         res.send(person);
     }

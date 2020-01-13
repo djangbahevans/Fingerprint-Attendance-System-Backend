@@ -4,7 +4,8 @@ const mongoose = require("mongoose");
 const PersonSchema = mongoose.Schema({
     id: {
         type: Number,
-        required: true
+        required: true,
+        unique: true
     },
     firstName: {
         type: String,
