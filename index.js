@@ -38,7 +38,7 @@ app.post('/', async (req, res) => {
     const { ins } = req.body;
     if (ins === "add") {
         const { id, first, last, dept } = req.body;
-        const person = await Person.create({ id, firstName: first, lastName: last, department: dept });
+        const person = await Person.create({ id, firstName: first, lastName: last, /*department: "Random"*/ });
         res.send(person);
     }
     else if (ins === "att") {
