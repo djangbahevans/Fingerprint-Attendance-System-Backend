@@ -43,17 +43,27 @@ app.post('/', async (req, res) => {
     }
     else if (ins === "att") {
         const { id, data } = req.body;
-        
-        const date = new Date();
-        const year = data.substring(0, 4) || date.getUTCFullYear()
-        const month = data.substring(4, 6) || date.getUTCMonth();
-        const day = data.substring(6, 8) || date.getUTCDay();
-        const hour = ddata.substring(8, 10) || date.getUTCHours();
-        const minute = data.substring(10, 12) || date.getUTCMinutes();
 
-        await Person.findOne({ id });
+        let year, month, day, hour, minute
+        if (data) {
+            year = data.substring(0, 4)
+            month = data.substring(4, 6)
+            day = data.substring(6, 8)
+            hour = data.substring(8, 10)
+            minute = data.substring(10, 12)
+        } else {
+            date = new Date();
+            year = date.getUTCFullYear()
+            month = date.getUTCMonth();
+            day = date.getUTCDay();
+            hour = date.getUTCHours();
+            minute = date.getUTCMinutes();
+        }
+
+        let person = await Person.findOne({ id });
         // Add and sort
-        person.attendance.push({ year, month, day, hour, minute }).sort((a, b) => {
+        person.attendance.push({ year, month, day, hour, minute });
+        person.attendance.sort((a, b) => {
             if (a.year > b.year) return 1;
             else if (a.year < b.year) return -1;
             else {
@@ -74,7 +84,7 @@ app.post('/', async (req, res) => {
                 }
             }
         });
-        const person = await person.save();
+        person = await person.save();
         res.send(person);
     }
     else if (ins === "delete") {
