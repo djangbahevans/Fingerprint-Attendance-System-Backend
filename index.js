@@ -38,7 +38,9 @@ app.post('/', async (req, res) => {
     const { ins } = req.body;
     if (ins === "add") {
         const { id, first, last, dept } = req.body;
-        const person = await Person.create({ id, firstName: first, lastName: last, /*department: "Random"*/ });
+        const existingPerson = await Person.findOne({ id });
+        if (existingPerson) await Person.deleteOne({ id });
+        const person = await Person.create({ id, firstName: first, lastName: last, department: dept });
         res.send(person);
     }
     else if (ins === "att") {
